@@ -1,0 +1,121 @@
+// Requirements
+
+1. User should be able to searach book by title
+2. User should be able to filter book by subject // physics , hindi , math
+3. User should be able to view books details
+4. User should be able to issue a available book 
+5. User should be able to return a book and system should check if fine applicable.
+6. System should be able to generate a token with user details , book details  , issue date , return date , fine amount , transaction id
+7. User should be able to login
+
+// Non Functional Requirement
+
+1. It should follow solid principles
+2. Design should be modular and easy to maintian
+3. it should be extensible to add more feature like payment strategy etc
+4. Components should have low coupling and high cohension
+
+
+// Entity
+
+1. User
+2. Book
+3. Library
+4. IssueRecord 
+5. SubjectType(enum)
+6. BookStatus(enum)
+7. IssueStatus(enum)
+
+
+
+// attributes and Methods
+
+1. User
+
++ name : string
++ userId : string
++ issueRecords : vector<IssueRecord*> 
+
++getName() : string
++getUserId() : string
++getIssueRecord() : vector<IssueRecord*> 
+
+
+
+2. Book
+
+
++title : string
++bookId : int
++details : string
++subject : SubjectType
++status : BookStatus
+
++getTitle() : string
++getBookId() : int
++getDetails() : string
++getSubject() : string
++isAvailable() : boolean
++issueBook() : void
++returnBook() : void
+
+
+
+3. Library
+
+
++name : string
++books : unordered_map<SubjectType , vector<Book*>>
+
+
++searchBook(title : string) : vector<Book*>
++filterBook(s : SubjectType) : vector<Book*>
++issueBook(u: User* , b : Book*): void
++returnBook(u: User* , b : Book*): void
+
+
+4. IssueRecord
+
++user : User
++library : Library
++issueDate: string
++returnDate : string
++book : Book
++transactionId : int
++fineAmount : int
+status : IssueStatus
+
+
++getUser() : User
++getLibraryName(): string
++getIssueDate() : date
++getReturnDate() : date
++getBookDetails() : Book
++getTransactionId() : int
+getFineAmount() : int
+getIssueStatus() : IssueStatus
+
+
+5. SubjectType (enum)
+  MATH
+  PHYSICS
+  HINDI
+  
+  
+6. BookStatus (enum)
+   AVAILABLE
+   ISSUED
+   
+7. IssueStatus(enum)
+    ACTIVE
+    RETURNED
+   
+   
+// RelationShip
+
+Library 1........* Book (aggregation)
+Library 1........* User (aggregation)
+
+User 1.........*IssueRecord(association)
+
+IssueRecord *.........1 Book (association)
