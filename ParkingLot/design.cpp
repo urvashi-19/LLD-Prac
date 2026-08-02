@@ -397,12 +397,14 @@ public:
         payment->calculateAmount(vehicle->getVehicleType());
 
         ParkingTicket* ticket =
-        new ParkingTicket(
-                        rand(),
-                         vehicle,
-                         spot,
-                         payment
-                );
+        generateParkingTicket(
+                vehicle,
+                spot,
+                payment
+            );
+                
+                
+        spot->occupy(ticket);
 
         activeTickets[
             ticket->getTicketId()
