@@ -1,0 +1,122 @@
+// Functional Requirement
+1. System should support different types of vehicles parking - BIKES , CARS
+2. Different vehicles have different payment
+3. Parkinglot should have different Parking floors 
+4. Each Floor should have rows and each row should have 10 parking slots
+5.System should able to genearte a ParkingTicket for each vehicles
+7. System should mark the spot as occupied or unavailable
+8.System should check if parking slot is available
+9. System should support searching a parked vehicle using the ParkingTicket.
+10. System should allow exists of a vehicle using a ParkingTicket only
+
+// NFR
+1. it should be modular
+2. It should follow SOLID principles
+3. There should be low coupling and high cohension
+4. Design should support differen types of vehicles and payemnt strategy in future
+5. The design should be testable and maintable.
+
+// Entity
+1. Vehicles
+2. Payment
+3. Parking Floor
+4. Parking Row
+5. Parking Spot
+6.ParkingLot
+7.ParkingTicket
+8. VehicleType (enum)
+9.ParkingSPOTStatus (enum)
+
+// RelationShip
+
+1. ParkingLot 1........* (Parking Floor) (composition)
+2. Parking Floor 1.........m (Parking row )(composition)
+3. Parking Row 1...........10 (Parking Spot)(composition)
+4. Payment 1.................1 (ParkingTicket) (aggregation)
+5. ParkingTicket 1...........1 (Vehicles) (association)
+6. ParkingTicket 1............1 (Parking Spot) (association)
+
+
+// Attributes & Method
+
+1. VehicleType : BIKES , CAR
+2.ParkingSPOTStatus : OCCUPIED , AVAILABLE
+
+
+3. Vehicles
+   vehicleNumber : string
+   vehicleType : VehicleType
+   
+   
+   getVehicleNumbe() : string
+   getVehicleType() : VehicleType
+   
+4. Payment
+   transactionId : int
+   amount : double
+   
+   getTransactionId() : int
+   getAmount() : double
+   calculateAmount(VehicleType type) : double
+   pay() : void
+   
+  
+
+5. ParkingFloor
+   floorNumber : int
+   parkingRow : vector<ParkingRow*>
+   
+   getFloorNumber() : ParkingFloor
+   addParkingRow(ParkingRow * p) : void
+   getParkingRows : vector<ParkingRow*>
+   findAvailableSpot : ParkingSpot*
+   
+   
+6. ParkingRow
+   rowNumber : int
+   parkingSpot : vector<ParkingSpot*>
+   
+   getRowNumber() : int
+   addParkingSpot(ParkingSpot * p) : void
+   getParkingSpot : vector<ParkingSpot*>
+   findAvailableSpot() : ParkingSpot*
+   
+7. ParkingSpot
+  spotNumber : int
+  status : ParkingSpotStatus
+  currentTicket : ParkingTicket*
+   
+   getSpotNumber() : int
+   isAvailable() : bool
+   getCurrentTicket : ParkingTicket*
+   occupy(ParkingTicket*):void
+   vacate() : void
+  
+   
+   
+8. ParkingTicket
+   ticketId : int
+   vehicle : Vehicles*
+   payment : Payment
+   parkingSpot : ParkingSpot*
+   entryTime : DateTime
+   exitTime : DateTime
+   
+   
+   getTicketId() : int
+   getVehicle() : Vehicle*
+   getParkingSpot() : ParkingSpot*
+   
+   
+9.  ParkingLot
+    name : string
+    floors : vector<ParkingFloor*>
+    activeTickets : unordered_map<int, ParkingTicket*>
+    
+    
+    addParkingFloor(ParkingFloor* floor) : void;
+    findAvailableSpot() : ParkingSpot
+    generateParkingTicket(Vehicle* vehicle,ParkingSpot* spot) : ParkingTicket
+    ParkVehicle(Vehicle * v) : void
+    searchParkedVehicle(ticketId) : Vehicle
+    exitVehicle(ticketId) : bool
