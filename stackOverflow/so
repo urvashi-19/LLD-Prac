@@ -1,0 +1,61 @@
+//StackOverflow
+
+//FR
+
+1. User should be able to search questions.
+2. User should be able to view a question and its answers.
+3. User should be able to post a question.
+4. User should be able to post an answer to a question.
+5. User should be able to upvote/downvote a question.
+6. User should be able to upvote/downvote an answer.
+7. User should be able to upload images while posting.
+8. User should be able to view the author of a question or answer.
+
+//NFR
+
+1. It should be modular
+2. It should have less coupling and high cohension
+3. It should follow solid principle
+4. It should be testable and maintain
+5. User should be able to view the author of a question or answer
+
+
+//Entity
+1. User
+2. Profile
+3. Question
+4. Answer
+5. Vote
+6. Image
+7. StackOverflow
+
+
+
+
+//RelationShip
+
+1. User 1 -------- 1 Profile (Composition)
+
+2. User 1 -------- * Question (Association)
+
+3. User 1 -------- * Answer (Association)
+
+4. Question 1 -------- * Answer (Composition)
+
+5. Question 1 -------- * Image (Aggregation)
+
+6. Answer 1 -------- * Image (Aggregation)
+
+7. Vote * -------- 1 User (Association)
+
+8. Vote * -------- 1 Question/Answer (Association)
+
+
+
+
+
+
+
+
+
+
