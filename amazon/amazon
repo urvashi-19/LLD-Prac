@@ -1,0 +1,42 @@
+//Amazon 
+
+//FR
+
+1. User should be able to search products.
+2. User should be able to view product details.
+3. User should be able to add/remove products from the cart.
+4. User should be able to update product quantity in the cart.
+5. User should be able to place an order and generate an Order ID.
+6. System should calculate the total order amount.
+7. User should be able to make a payment.
+8. User should be able to track the order status.
+9. System should maintain inventory.
+10. System should update inventory after a successful order.
+
+
+
+NFR
+
+1. The design should be modular.
+2. The design should have low coupling and high cohesion.
+3. The design should follow SOLID principles.
+4. The design should be scalable.
+5. The design should be maintainable and testable.
+6. The design should support adding new payment methods in the future.
+
+
+
+
+entity
+1. User
+2. Product
+3. Cart
+4. Order
+5. Payment
+6. Inventory
+7. Amazon
+8. OrderStatus(enum)
+9. PaymentStaus(enum)
+10 ProductCategory(enum)
+11. CartItem
+12. OrderItem
