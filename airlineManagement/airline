@@ -1,0 +1,59 @@
+// Airline Management System
+
+
+// Functional Requirements (FR)
+1. User should be able to search flights using source, destination, and travel date.
+2. User should be able to view flight details.
+3. User should be able to view available seats for a flight.
+4. User should be able to book a seat.
+5. System should generate a Booking ID after successful booking.
+6. User should be able to make payment.
+7. System should confirm booking after successful payment.
+8. System should mark the selected seat as BOOKED.
+9. User should be able to cancel a booking.
+10. System should release the seat after cancellation.
+11. User should be able to view booking details.
+
+
+// Non Functional Requirements (NFR)
+1. Design should be modular.
+2. Design should follow SOLID principles.
+3. Low coupling and high cohesion.
+4. Design should be scalable.
+5. Design should be maintainable and testable.
+6. Design should support adding new payment methods.
+7. Design should support adding new notification channels.
+
+
+Entities
+1. Airline
+2. Flight
+3. Seat
+4. User
+5. Booking
+6. Payment
+7. BookingService
+8. NotificationService
+9. SeatStatus (enum)
+10. BookingStatus (enum)
+11. PaymentStatus (enum)
+12. SeatType (enum)
+
+RelationShip
+1. Airline 1 -------- * Flight
+(Composition)
+
+2. Flight 1 -------- * Seat
+(Composition)
+
+3. User 1 -------- * Booking
+(Association)
+
+4. Booking 1 ------- 1 Flight
+(Association)
+
+5. Booking 1 ------- 1 Seat
+(Association)
+
+6. Booking 1 ------- 1 Payment
+(Association)
