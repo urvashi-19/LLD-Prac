@@ -1,0 +1,69 @@
+Hotel Management System
+
+// Functional Requirements (FR)
+
+User should be able to search hotels by location.
+User should be able to view hotel details.
+User should be able to view available rooms.
+User should be able to book a room.
+System should generate a Booking ID.
+User should be able to make payment.
+System should confirm booking after successful payment.
+System should mark the room as occupied/booked.
+User should be able to cancel a booking.
+System should release the room after cancellation.
+User should be able to check-in using the Booking ID.
+User should be able to check-out.
+System should calculate the total bill based on the stay duration.
+
+
+// Non Functional Requirements (NFR)
+
+Design should be modular.
+Design should follow SOLID principles.
+Low coupling and high cohesion.
+Design should be scalable.
+Design should be maintainable and testable.
+Design should support multiple payment methods.
+Design should support multiple room types in the future.
+
+
+// Entities
+
+Hotel
+Room
+User
+Booking
+Payment
+BookingService
+NotificationService
+RoomStatus (enum)
+BookingStatus (enum)
+PaymentStatus (enum)
+RoomType (enum)
+
+
+//RelationShip
+
+// Hotel 1 ------------ * Room
+// (Composition)
+
+// User 1 ------------- * Booking
+// (Association)
+
+// Booking 1 ---------- 1 Room
+// (Association)
+
+// Booking 1 ---------- 1 Payment
+// (Association)
+
+// Hotel 1 ------------ * Booking
+// (Aggregation)
+
+// BookingService ------ Booking
+// (Dependency)
+
+// NotificationService -- BookingService
+// (Dependency)
+
+
