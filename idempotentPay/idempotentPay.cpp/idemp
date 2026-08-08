@@ -1,0 +1,368 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+
+int main() {
+    // Write C++ code here
+    std::cout << "Start small. Ship something.";
+
+    return 0;
+}#include <bits/stdc++.h>
+using namespace std;
+
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum class PaymentStatus {
+    SUCCESS,
+    FAILED
+};
+
+enum class PaymentType {
+    UPI,
+    CREDIT_CARD,
+    DEBIT_CARD,
+    WALLET
+};
+
+
+// ============================================================
+// PAYMENT STRATEGY
+// ============================================================
+
+class PaymentStrategy {
+
+public:
+
+    virtual PaymentStatus pay(double amount) = 0;
+
+    virtual ~PaymentStrategy() {}
+};
+
+
+// ============================================================
+// UPI PAYMENT
+// ============================================================
+
+class UPIPayment : public PaymentStrategy {
+
+public:
+
+    PaymentStatus pay(double amount) override {
+
+        cout << "Processing UPI payment of Rs. "
+             << amount << endl;
+
+        // Actual UPI gateway call would happen here.
+
+        return PaymentStatus::SUCCESS;
+    }
+};
+
+
+// ============================================================
+// CREDIT CARD PAYMENT
+// ============================================================
+
+class CreditCardPayment : public PaymentStrategy {
+
+public:
+
+    PaymentStatus pay(double amount) override {
+
+        cout << "Processing Credit Card payment of Rs. "
+             << amount << endl;
+
+        // Actual card gateway call would happen here.
+
+        return PaymentStatus::SUCCESS;
+    }
+};
+
+
+// ============================================================
+// DEBIT CARD PAYMENT
+// ============================================================
+
+class DebitCardPayment : public PaymentStrategy {
+
+public:
+
+    PaymentStatus pay(double amount) override {
+
+        cout << "Processing Debit Card payment of Rs. "
+             << amount << endl;
+
+        return PaymentStatus::SUCCESS;
+    }
+};
+
+
+// ============================================================
+// WALLET PAYMENT
+// ============================================================
+
+class WalletPayment : public PaymentStrategy {
+
+public:
+
+    PaymentStatus pay(double amount) override {
+
+        cout << "Processing Wallet payment of Rs. "
+             << amount << endl;
+
+        return PaymentStatus::SUCCESS;
+    }
+};
+
+
+// ============================================================
+// PAYMENT FACTORY
+// ============================================================
+
+class PaymentFactory {
+
+public:
+
+    static PaymentStrategy* createPaymentStrategy(
+        PaymentType type) {
+
+        switch(type) {
+
+            case PaymentType::UPI:
+                return new UPIPayment();
+
+            case PaymentType::CREDIT_CARD:
+                return new CreditCardPayment();
+
+            case PaymentType::DEBIT_CARD:
+                return new DebitCardPayment();
+
+            case PaymentType::WALLET:
+                return new WalletPayment();
+        }
+
+        return nullptr;
+    }
+};
+
+
+// ============================================================
+// PAYMENT REPOSITORY
+// ============================================================
+//
+// Stores the result against the idempotency key.
+//
+// Example:
+//
+// "RIDE_123_PAYMENT" -> SUCCESS
+//
+// ============================================================
+
+class PaymentRepository {
+
+private:
+
+    unordered_map<string, PaymentStatus> payments;
+
+public:
+
+    bool exists(const string& idempotencyKey) {
+
+        return payments.find(idempotencyKey)
+               != payments.end();
+    }
+
+
+    PaymentStatus getPaymentStatus(
+        const string& idempotencyKey) {
+
+        return payments.at(idempotencyKey);
+    }
+
+
+    void savePayment(
+        const string& idempotencyKey,
+        PaymentStatus status) {
+
+        payments[idempotencyKey] = status;
+    }
+};
+
+
+// ============================================================
+// PAYMENT SERVICE
+// ============================================================
+
+class PaymentService {
+
+private:
+
+    PaymentRepository* repository;
+
+public:
+
+    PaymentService(PaymentRepository* repository) {
+
+        this->repository = repository;
+    }
+
+
+    PaymentStatus makePayment(
+        const string& idempotencyKey,
+        double amount,
+        PaymentStrategy* strategy) {
+
+
+        // ----------------------------------------------------
+        // STEP 1: Check if this request was already processed
+        // ----------------------------------------------------
+
+        if(repository->exists(idempotencyKey)) {
+
+            cout << "Duplicate payment request detected."
+                 << endl;
+
+            cout << "Returning previous payment result."
+                 << endl;
+
+            return repository->getPaymentStatus(
+                idempotencyKey
+            );
+        }
+
+
+        // ----------------------------------------------------
+        // STEP 2: Process payment
+        // ----------------------------------------------------
+
+        PaymentStatus status =
+            strategy->pay(amount);
+
+
+        // ----------------------------------------------------
+        // STEP 3: Store result
+        // ----------------------------------------------------
+
+        repository->savePayment(
+            idempotencyKey,
+            status
+        );
+
+
+        return status;
+    }
+};
+
+
+// ============================================================
+// HELPER FUNCTION
+// ============================================================
+
+void printPaymentStatus(PaymentStatus status) {
+
+    if(status == PaymentStatus::SUCCESS) {
+
+        cout << "Payment SUCCESS" << endl;
+    }
+    else {
+
+        cout << "Payment FAILED" << endl;
+    }
+}
+
+
+// ============================================================
+// MAIN
+// ============================================================
+
+int main() {
+
+    // --------------------------------------------------------
+    // Repository
+    // --------------------------------------------------------
+
+    PaymentRepository repository;
+
+
+    // --------------------------------------------------------
+    // Payment Service
+    // --------------------------------------------------------
+
+    PaymentService paymentService(
+        &repository
+    );
+
+
+    // --------------------------------------------------------
+    // Create payment strategy using Factory
+    // --------------------------------------------------------
+
+    PaymentStrategy* paymentStrategy =
+        PaymentFactory::createPaymentStrategy(
+            PaymentType::UPI
+        );
+
+
+    // --------------------------------------------------------
+    // Generate idempotency key
+    // --------------------------------------------------------
+
+    string idempotencyKey =
+        "RIDE_123_PAYMENT";
+
+
+    // ========================================================
+    // FIRST REQUEST
+    // ========================================================
+
+    cout << "\n========== FIRST REQUEST ==========\n";
+
+
+    PaymentStatus status1 =
+        paymentService.makePayment(
+            idempotencyKey,
+            500,
+            paymentStrategy
+        );
+
+
+    printPaymentStatus(status1);
+
+
+    // ========================================================
+    // SECOND REQUEST
+    // ========================================================
+    //
+    // User clicks Pay again.
+    //
+    // Same idempotency key is sent.
+    //
+    // Payment should NOT happen again.
+    //
+    // ========================================================
+
+    cout << "\n========== SECOND REQUEST ==========\n";
+
+
+    PaymentStatus status2 =
+        paymentService.makePayment(
+            idempotencyKey,
+            500,
+            paymentStrategy
+        );
+
+
+    printPaymentStatus(status2);
+
+
+    // --------------------------------------------------------
+    // Cleanup
+    // --------------------------------------------------------
+
+    delete paymentStrategy;
+
+
+    return 0;
+}
